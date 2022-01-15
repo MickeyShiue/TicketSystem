@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model.RequestModel;
 using TicketSystem.Web.Model.ResponseModel;
+using TicketSystem.Web.Service.AuthUserService;
 using TicketSystem.Web.Service.JwtService;
 
 namespace TicketSystem.Web.Controllers
@@ -17,26 +18,31 @@ namespace TicketSystem.Web.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IJwtService _jwtService;
+        private readonly IAuthService _authService;
 
-        public TokenController(IJwtService jwtService)
+        public TokenController(IJwtService jwtService, IAuthService authService)
         {
             this._jwtService = jwtService;
+            this._authService = authService;
         }
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public ActionResult<BaseResult<TokenResponse>> SignIn(LoginRequest login)
+        public ActionResult<BaseResult<TokenResponse>> Login(LoginRequest login)
         {
-            var token = _jwtService.GenerateToken(login);
-
-            if (!string.IsNullOrEmpty(token))
+            if (_authService.VerifyUser(login))
             {
-                var tokenResponse = new TokenResponse() { Token = token };
-                return new BaseResult<TokenResponse>((int)ApiResponseCode.Success, ApiResponseCode.Success.ToString(), tokenResponse);
-            }
+                var token = _jwtService.GenerateToken(login);
 
-            return new BaseResult<TokenResponse>((int)ApiResponseCode.Unauthorized, ApiResponseCode.Unauthorized.ToString(), null);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    var tokenResponse = new TokenResponse() { Token = token };
+                    return new BaseResult<TokenResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), tokenResponse);
+                }
+            }         
+            return new BaseResult<TokenResponse>((int)ApiResponseCodeEnum.Unauthorized, ApiResponseCodeEnum.Unauthorized.ToString(), null);
         }
+
 
     }
 }

@@ -6,7 +6,11 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TicketSystem.Web.Common;
+using TicketSystem.Web.Enum;
+using TicketSystem.Web.Model;
 using TicketSystem.Web.Model.RequestModel;
+using System.Linq;
 
 namespace TicketSystem.Web.Service.JwtService
 {
@@ -18,8 +22,7 @@ namespace TicketSystem.Web.Service.JwtService
         public JwtService(IConfiguration configuration, IMemoryCache memoryCache)
         {
             this.Configuration = configuration;
-            this._memoryCache = memoryCache;
-            this.InitializationCache();
+            this._memoryCache = memoryCache;          
         }
 
         public string GenerateToken(LoginRequest login, int expireMinutes = 30)
@@ -30,22 +33,21 @@ namespace TicketSystem.Web.Service.JwtService
             // 設定要加入到 JWT Token 中的聲明資訊(Claims)
             var claims = new List<Claim>();
 
-          
-            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, login.Username)); // User.Identity.Name                    
-            // 你可以自行擴充 "roles" 加入登入者該有的角色
-            claims.Add(new Claim("roles", "Admin"));
-            claims.Add(new Claim("roles", "Users"));
 
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, login.Username)); // User.Identity.Name
+
+            // 你可以自行擴充 "roles" 加入登入者該有的角色
+            claims.Add(new Claim("roles", GetRole(login)));            
             var userClaimsIdentity = new ClaimsIdentity(claims);
 
             // 建立一組對稱式加密的金鑰，主要用於 JWT 簽章之用
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signKey));      
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
             // 建立 SecurityTokenDescriptor
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = issuer,           
+                Issuer = issuer,
                 Subject = userClaimsIdentity,
                 Expires = DateTime.Now.AddMinutes(expireMinutes),
                 SigningCredentials = signingCredentials
@@ -59,10 +61,25 @@ namespace TicketSystem.Web.Service.JwtService
             return serializeToken;
         }
 
-        private void InitializationCache()
+        private string GetRole(LoginRequest login)
         {
-            //UserRole
-            //_memoryCache.Set(CacheKey.MemberList,);
+            _memoryCache.TryGetValue(CacheKey.MemberList, out List<UserInfo> memberList);
+
+            var role = memberList.FirstOrDefault(r => r.UserName == login.Username).Role;
+
+            switch (role)
+            {
+                case RoleEnum.QA:
+                    return "QA";                   
+                case RoleEnum.RD:
+                    return "RD";
+                case RoleEnum.PM:
+                    return "PM";
+                case RoleEnum.Admin:
+                    return "Admin";
+                default:
+                    return "NotFound";
+            }
         }
     }
 }

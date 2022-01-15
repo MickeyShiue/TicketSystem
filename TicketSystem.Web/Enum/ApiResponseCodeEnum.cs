@@ -1,6 +1,6 @@
 ﻿namespace TicketSystem.Web.Enum
 {
-    public enum ApiResponseCode
+    public enum ApiResponseCodeEnum
     {
         Success = 200,
         Unauthorized = 401,
