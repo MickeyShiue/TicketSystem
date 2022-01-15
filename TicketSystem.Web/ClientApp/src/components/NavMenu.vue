@@ -11,18 +11,13 @@
                         @click="toggle">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-                     v-bind:class="{show: isExpanded}">
-                    <ul class="navbar-nav flex-grow">
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Home' }" class="nav-link text-dark">Home</router-link>
-                           
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Counter' }" class="nav-link text-dark">Counter</router-link>
-                        </li>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" v-bind:class="{show: isExpanded}" v-if="isLogin">
+                    <ul class="navbar-nav flex-grow">                                    
                         <li class="nav-item">
                             <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'TicketList' }" class="nav-link text-dark">TicketList</router-link>
                         </li>
                     </ul>
                 </div>
@@ -58,7 +53,8 @@
         name: "NavMenu",
         data() {
             return {
-                isExpanded: false
+                isExpanded: false,
+                isLogin: false
             }
         },
         methods: {
