@@ -2,30 +2,18 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand">Vue JS Template for .NET 5</a>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse"
-                        aria-label="Toggle navigation"
-                        @click="toggle">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="navbar-brand">Vue JS Template for .NET 5</a>               
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" v-bind:class="{show: isExpanded}" v-if="isLogin">
                     <ul class="navbar-nav flex-grow">                                    
                         <li class="nav-item">
-                            <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'TicketList' }" class="nav-link text-dark">TicketList</router-link>
-                        </li>
+                            <button type="button" class="btn btn-danger" @click="Logout">Logout</button>
+                        </li>                      
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 </template>
-
 
 <style>
     a.navbar-brand {
@@ -49,22 +37,22 @@
     }
 </style>
 <script>
+    import { IsLogin, sessionStorageKeys } from '../Common/Common'
     export default {
         name: "NavMenu",
         data() {
-            return {
-                isExpanded: false,
+            return {               
                 isLogin: false
             }
         },
         methods: {
-            collapse() {
-                this.isExpanded = false;
-            },
-
-            toggle() {
-                this.isExpanded = !this.isExpanded;
+            Logout() {
+                sessionStorage.removeItem(sessionStorageKeys.token);
+                window.location = '/'
             }
+        },
+        mounted() {
+            this.isLogin = IsLogin();
         }
     }
 </script>

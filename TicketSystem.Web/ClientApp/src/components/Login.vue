@@ -25,6 +25,7 @@
 
 <script>
     import axios from 'axios'
+    import { api, sessionStorageKeys} from '../Common/Common'
     export default {
         name: "Login",
         data() {
@@ -37,15 +38,18 @@
             Login() {
                 axios({
                     method: 'post',
-                    url: 'api/Token/Login',
+                    url: api.loginUrl,
                     data: {
                         Username: this.userName,
                         PassWord: this.passWord
                     }
                 }).then(function (response) {                    
-                    if (response.data.errorCode == 200) {                     
-                        sessionStorage.setItem("JwtToken", response.data.data.token);
+                    if (response.data.errorCode == 200) {
+                        sessionStorage.setItem(sessionStorageKeys.token, response.data.data.token);
                         window.location = '/TicketList';
+                    } else {
+                        alert('LoginFail');
+                        console.log(response.data);
                     }
                 });
             }
