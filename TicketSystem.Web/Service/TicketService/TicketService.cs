@@ -19,7 +19,7 @@ namespace TicketSystem.Web.Service.TicketService
             this._memoryCache = memoryCache;
         }
 
-        public IEnumerable<TicketInfo> GetTickets(UserInfo user)
+        public IEnumerable<TicketInfo> GetTickets()
         {
             _memoryCache.TryGetValue(CacheKey.TicketList, out List<TicketInfo> tickets);
             return tickets;

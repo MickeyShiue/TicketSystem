@@ -37,7 +37,7 @@
     }
 </style>
 <script>
-    import { IsLogin, sessionStorageKeys } from '../Common/Common'
+    import { isShowLogOutButton,logOut } from '../Common/Common'
     export default {
         name: "NavMenu",
         data() {
@@ -47,12 +47,11 @@
         },
         methods: {
             Logout() {
-                sessionStorage.removeItem(sessionStorageKeys.token);
-                window.location = '/'
+                logOut();
             }
         },
-        mounted() {
-            this.isLogin = IsLogin();
+        mounted() {            
+            this.isLogin = isShowLogOutButton();                   
         }
     }
 </script>

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { IsLogin, sessionStorageKeys, api } from '../Common/Common'
+    import { checkLogin, token, api } from '../Common/Common'
     import axios from 'axios'
     export default {
         name: "TicketEdit",
@@ -39,8 +39,7 @@
                 ticketId: '',
                 title: '',
                 description: '',
-                ticketStatus: '',
-                ticketType: '',
+                ticketStatus: '',                
                 role:'',
                 options: [],
             }
@@ -56,19 +55,17 @@
                         ticketId: ticketId
                     },
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
                         let responseData = response.data.data;
                         console.log(responseData);
-
                         _this.role = responseData.role;
                         _this.options = responseData.ticketStatusOptions
                         _this.ticketId = responseData.ticketId;
                         _this.title = responseData.title;
-                        _this.description = responseData.description;
-                        _this.ticketType = responseData.ticketType;
+                        _this.description = responseData.description;                        
                         _this.ticketStatus = responseData.ticketStatus;
                     } else {
                         alert('GetTicketById');
@@ -88,7 +85,7 @@
                         ticketStatus: _this.ticketStatus
                     },
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
@@ -109,7 +106,7 @@
                         ticketId: _this.ticketId                     
                     },
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
@@ -122,10 +119,8 @@
                 });
             }
         },
-        mounted() {
-            if (!IsLogin()) {
-                window.location = '/'
-            }
+        mounted() {            
+            checkLogin()
             this.getTicketById();
         }
     }

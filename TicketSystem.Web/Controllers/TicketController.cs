@@ -20,7 +20,7 @@ namespace TicketSystem.Web.Controllers
         }
 
         [Authorize(Roles = "QA,RD")]
-        [HttpPost("TicketList")]
+        [HttpGet("TicketList")]
         public ActionResult<BaseResult<TicketListResponse>> GetTicketList()
         {
             var tickets = _ticketService.GetTickets();
@@ -30,7 +30,7 @@ namespace TicketSystem.Web.Controllers
         }
 
         [Authorize(Roles = "QA,RD")]
-        [HttpPost("GetTicketById")]
+        [HttpPost("TicketById")]
         public ActionResult<BaseResult<TicketInfo>> GetTicketById(GetTicketByIdRequest getTicketByIdRequest)
         {
             var ticket = _ticketService.GetTicketById(getTicketByIdRequest.TicketId);

@@ -1,7 +1,7 @@
 <template>
     <div class="form-group row">
         <div class="col-12">
-            <button type="button" class="btn btn-primary mr-3" v-if="role!=2" @click="gotoCreate">Create</button>
+            <a href="/TicketCreate" class="btn btn-primary mr-3" v-if="role!='RD'" @click="gotoCreate">Create</a>
         </div>
     </div>
     <table class='table table-striped' aria-labelledby="tableLabel" v-if="tickets">
@@ -27,35 +27,30 @@
 </template>
 
 <script>
-    import { IsLogin, sessionStorageKeys, api, mapTicketType, mapTicketStatus } from '../Common/Common'
+    import { checkLogin, api, token, mapTicketData, mapRole } from '../Common/Common'
     import axios from 'axios'
     export default {
         name: "TicketList",
         data() {
             return {
                 tickets: [],
-                role:''
+                role: ''
             }
         },
         methods: {
             getTickets() {
                 var _this = this
                 axios({
-                    method: 'post',
+                    method: 'get',
                     url: api.getTickets,
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
-                    if (response.data.errorCode == 200) {                        
-                        _this.tickets = response.data.data.tickets;
-                        _this.tickets.forEach(function(item){
-                            item.ticketType = mapTicketType(item.ticketType);
-                            item.ticketStatus = mapTicketStatus(item.ticketStatus);                            
-                        });
+                    if (response.data.errorCode == 200) {
+                        _this.tickets = mapTicketData(response.data.data.tickets);                       
                     } else {
                         alert('getTicketFail');
-                        console.log(response.data);
                     }
                 });
             },
@@ -65,22 +60,17 @@
                     method: 'get',
                     url: api.getUserRole,
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
-                    if (response.data.errorCode == 200) {                       
-                        _this.role = response.data.data;            
-                    } 
+                    if (response.data.errorCode == 200) {
+                        _this.role = mapRole(response.data.data);
+                    }
                 });
-            },
-            gotoCreate() {
-                window.location = '/TicketCreate'
-            }
+            }           
         },
-        mounted() {         
-            if (!IsLogin()) {
-                window.location = '/'
-            }
+        mounted() {
+            checkLogin()
             this.getTickets();
             this.getUserRole();
         }

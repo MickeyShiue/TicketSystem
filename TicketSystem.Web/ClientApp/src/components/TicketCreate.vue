@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import { IsLogin, sessionStorageKeys, api } from '../Common/Common'
+    import { checkLogin, sessionStorageKeys, api } from '../Common/Common'
     import axios from 'axios'
     export default {
         name: "TicketCreate",
@@ -78,9 +78,7 @@
             }
         },
         mounted() {
-            if (!IsLogin()) {
-                window.location = '/'
-            }
+            checkLogin();
             this.getTicketStatus();
         }
     }

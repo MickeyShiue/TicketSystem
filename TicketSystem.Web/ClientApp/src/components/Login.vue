@@ -25,7 +25,7 @@
 
 <script>
     import axios from 'axios'
-    import { api, sessionStorageKeys} from '../Common/Common'
+    import { api, loging} from '../Common/Common'
     export default {
         name: "Login",
         data() {
@@ -45,11 +45,9 @@
                     }
                 }).then(function (response) {                    
                     if (response.data.errorCode == 200) {
-                        sessionStorage.setItem(sessionStorageKeys.token, response.data.data.token);
-                        window.location = '/TicketList';
+                        loging(response.data.data.token);                        
                     } else {
-                        alert('LoginFail');
-                        console.log(response.data);
+                        alert('LoginFail');                       
                     }
                 });
             }
