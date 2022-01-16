@@ -1,4 +1,9 @@
 <template>
+    <div class="form-group row">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary mr-3" v-if="role!=2" @click="gotoCreate">Create</button>
+        </div>
+    </div>
     <table class='table table-striped' aria-labelledby="tableLabel" v-if="tickets">
         <thead>
             <tr>
@@ -28,7 +33,8 @@
         name: "TicketList",
         data() {
             return {
-                tickets:[]              
+                tickets: [],
+                role:''
             }
         },
         methods: {
@@ -55,6 +61,23 @@
                         console.log(response.data);
                     }
                 });
+            },
+            getUserRole() {
+                var _this = this
+                axios({
+                    method: 'post',
+                    url: api.getUserRole,
+                    headers: {
+                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                    }
+                }).then(function (response) {
+                    if (response.data.errorCode == 200) {
+                        _this.role = response.data.data.role;            
+                    } 
+                });
+            },
+            gotoCreate() {
+                window.location = '/TicketCreate'
             }
         },
         mounted() {         
@@ -62,6 +85,7 @@
                 window.location = '/'
             }
             this.getTickets();
+            this.getUserRole();
         }
     }
 </script>

@@ -1,11 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model;
 using TicketSystem.Web.Model.RequestModel;
@@ -69,6 +63,43 @@ namespace TicketSystem.Web.Controllers
                 return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
 
             return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
+        }
+
+        [Authorize(Roles = "QA")]
+        [HttpPost("CreateTicket")]
+        public ActionResult<BaseResult<object>> CreateTicket(TicketInfo ticket)
+        {
+            var updateReuslt = _ticketService.CreateTicket(ticket);
+            if (updateReuslt)
+                return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
+
+            return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
+        }
+
+        [Authorize(Roles = "QA")]
+        [HttpPost("GetTicketStatus")]
+        public ActionResult<BaseResult<TicketInfo>> GetTicketStatus()
+        {
+            var ticket = new TicketInfo();
+            ticket.TicketStatusOptions = _ticketService.GetTicketOptionsByRole(UserInfo.Role);            
+
+            if (ticket == null)
+                return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
+
+            return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
+        }
+
+        [Authorize(Roles = "QA,RD")]
+        [HttpPost("GetUserRole")]
+        public ActionResult<BaseResult<TicketInfo>> GetUserRole()
+        {
+            var ticket = new TicketInfo();
+            ticket.Role = UserInfo.Role;
+
+            if (ticket == null)
+                return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
+
+            return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
         }
     }
 }

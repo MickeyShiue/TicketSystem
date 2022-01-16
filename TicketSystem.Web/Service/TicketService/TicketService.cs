@@ -78,5 +78,22 @@ namespace TicketSystem.Web.Service.TicketService
 
             return true;
         }
+
+        public bool CreateTicket(TicketInfo ticket)
+        {
+            _memoryCache.TryGetValue(CacheKey.TicketList, out List<TicketInfo> tickets);
+
+            tickets.Add(new TicketInfo()
+            {
+                TicketId = Guid.NewGuid().ToString(),
+                Title = ticket.Title,
+                Description = ticket.Description,
+                TicketStatus = ticket.TicketStatus,
+                TicketType = TicketTypeEnum.Bug
+            });
+
+            _memoryCache.Set(CacheKey.TicketList, tickets);
+            return true;
+        }
     }
 }

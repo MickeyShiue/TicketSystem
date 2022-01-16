@@ -4,7 +4,10 @@
     getTickets: 'api/Ticket/TicketList',
     getTicketById: 'api/Ticket/GetTicketById',
     updateTicket: 'api/Ticket/UpdateTicket',
-    deleteTicket:'api/Ticket/DeleteTicket'
+    deleteTicket: 'api/Ticket/DeleteTicket',
+    getTicketStatus: 'api/Ticket/GetTicketStatus',
+    createTicket: 'api/Ticket/CreateTicket',
+    getUserRole:'api/Ticket/GetUserRole'
 }
 
 export const sessionStorageKeys = {

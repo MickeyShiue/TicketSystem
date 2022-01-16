@@ -15,5 +15,7 @@ namespace TicketSystem.Web.Service.TicketService
         bool UpdateTicket(TicketInfo ticket);
 
         bool DeleteTicket(TicketInfo ticket);
+
+        bool CreateTicket(TicketInfo ticket);
     }
 }

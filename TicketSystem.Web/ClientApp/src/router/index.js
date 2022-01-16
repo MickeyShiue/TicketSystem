@@ -2,6 +2,7 @@
 import FetchData from "@/components/FetchData.vue";
 import TicketList from "@/components/TicketList.vue";
 import TicketEdit from "@/components/TicketEdit.vue";
+import TicketCreate from "@/components/TicketCreate.vue";
 import Login from "@/components/Login.vue";
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
         path: "/TicketEdit",
         name: "TicketEdit",
         component: TicketEdit,
+    },
+    {
+        path: "/TicketCreate",
+        name: "TicketCreate",
+        component: TicketCreate,
     }
 ];
 
