@@ -1,7 +1,9 @@
 ﻿export const api =
 {
     loginUrl: 'api/Token/Login',
-    getTickets: 'api/Ticket/TicketList'
+    getTickets: 'api/Ticket/TicketList',
+    getTicketById: 'api/Ticket/GetTicketById',
+    updateTicket:'api/Ticket/UpdateTicket'
 }
 
 export const sessionStorageKeys = {

@@ -71,6 +71,31 @@ namespace TicketSystem.Web.Service.AuthUserService
                 }
             };
             _memoryCache.Set(CacheKey.TicketList, ticketList);
+
+            var ticketOption = new List<TicketStatusOption>()
+            {
+                new TicketStatusOption
+                {
+                    id = 1,
+                    value ="New"
+                },
+                new TicketStatusOption
+                {
+                    id = 2,
+                    value ="Active"
+                },
+                new TicketStatusOption
+                {
+                    id = 3,
+                    value ="Resloved"
+                },
+                new TicketStatusOption
+                {
+                    id = 4,
+                    value ="Closed"
+                },
+            };
+            _memoryCache.Set(CacheKey.TicketStatusOption, ticketOption);
         }
     }
 }

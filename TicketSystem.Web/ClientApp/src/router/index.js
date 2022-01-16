@@ -1,6 +1,7 @@
 ﻿import { createWebHistory, createRouter } from "vue-router";
 import FetchData from "@/components/FetchData.vue";
 import TicketList from "@/components/TicketList.vue";
+import TicketEdit from "@/components/TicketEdit.vue";
 import Login from "@/components/Login.vue";
 
 const routes = [
@@ -18,6 +19,11 @@ const routes = [
         path: "/TicketList",
         name: "TicketList",
         component: TicketList,
+    },
+    {
+        path: "/TicketEdit",
+        name: "TicketEdit",
+        component: TicketEdit,
     }
 ];
 

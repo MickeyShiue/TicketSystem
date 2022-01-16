@@ -15,7 +15,7 @@
                 <td>{{ ticket.description }}</td>
                 <td>{{ ticket.ticketType }}</td>
                 <td>{{ ticket.ticketStatus }}</td>
-                <td><a :href="`/edit?ticketId=${ticket.ticketId}`">Edit</a></td>
+                <td><a :href="`/TicketEdit?ticketId=${ticket.ticketId}`">Edit</a></td>
             </tr>
         </tbody>
     </table>

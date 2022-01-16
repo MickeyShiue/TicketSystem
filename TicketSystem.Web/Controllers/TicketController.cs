@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TicketSystem.Web.Enum;
+using TicketSystem.Web.Model;
+using TicketSystem.Web.Model.RequestModel;
 using TicketSystem.Web.Model.ResponseModel;
 using TicketSystem.Web.Service.TicketService;
 
@@ -22,7 +24,7 @@ namespace TicketSystem.Web.Controllers
         {
             this._ticketService = ticketService;
         }
-       
+
         [Authorize(Roles = "QA,RD")]
         [HttpPost("TicketList")]
         public ActionResult<BaseResult<TicketListResponse>> GetTicketList()
@@ -30,7 +32,31 @@ namespace TicketSystem.Web.Controllers
             var tickets = _ticketService.GetTickets(UserInfo);
 
             var ticketsResponse = new TicketListResponse() { Tickets = tickets };
-            return new BaseResult<TicketListResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticketsResponse);            
+            return new BaseResult<TicketListResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticketsResponse);
+        }
+
+        [Authorize(Roles = "QA,RD")]
+        [HttpPost("GetTicketById")]
+        public ActionResult<BaseResult<TicketInfo>> GetTicketById(GetTicketByIdRequest getTicketByIdRequest)
+        {
+            var ticket = _ticketService.GetTicketById(getTicketByIdRequest.TicketId);
+            ticket.TicketStatusOptions = _ticketService.GetTicketOptionsByRole(UserInfo.Role);
+
+            if (ticket == null)
+                return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
+
+            return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
+        }
+
+        [Authorize(Roles = "QA,RD")]
+        [HttpPost("UpdateTicket")]
+        public ActionResult<BaseResult<object>> UpdateTicket(TicketInfo ticket)
+        {
+            var updateReuslt  = _ticketService.UpdateTicket(ticket);         
+            if (updateReuslt)
+                return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
+
+            return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);           
         }
     }
 }

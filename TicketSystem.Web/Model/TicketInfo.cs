@@ -1,4 +1,5 @@
-﻿using TicketSystem.Web.Enum;
+﻿using System.Collections.Generic;
+using TicketSystem.Web.Enum;
 
 namespace TicketSystem.Web.Model
 {
@@ -12,6 +13,15 @@ namespace TicketSystem.Web.Model
 
         public TicketStatusEnum TicketStatus { get; set; }
 
-        public TicketTypeEnum TicketType { get; set; }      
+        public TicketTypeEnum TicketType { get; set; }
+
+        public IEnumerable<TicketStatusOption> TicketStatusOptions { get; set; }
     }    
+
+    public class TicketStatusOption
+    {
+        public int id { get; set; }
+
+        public string value { get; set; }
+    }
 }
