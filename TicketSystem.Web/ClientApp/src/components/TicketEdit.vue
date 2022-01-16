@@ -15,7 +15,7 @@
         <label for="" class="col-4 col-form-label">Status</label>
         <div class="col-4">
             <select v-model="ticketStatus" class="form-control sl">
-                <option v-for="option in options" v-bind:value="option.id" v-bind:key="option.id">
+                <option v-for="option in ticketStatusOptions" v-bind:value="option.id" v-bind:key="option.id">
                     {{ option.value }}
                 </option>
             </select>
@@ -23,14 +23,14 @@
     </div>
     <div class="form-group row">
         <div class="col-12">
-            <button type="button" class="btn btn-primary mr-3" @click="updateTicket">update</button>
-            <button type="button" class="btn btn btn-danger mr-3" @click="deleteTicket" v-if="role==1" >Delete</button>
+            <button type="button" class="btn btn-primary mr-3" @click="updateTicket">updateTicket</button>
+            <button type="button" class="btn btn btn-danger mr-3" @click="deleteTicket" v-if="role=='QA'" >DeleteTicket</button>
         </div>
     </div>
 </template>
 
 <script>
-    import { checkLogin, token, api } from '../Common/Common'
+    import { checkLogin, token, api, getQueryString, mapRole} from '../Common/Common'
     import axios from 'axios'
     export default {
         name: "TicketEdit",
@@ -41,35 +41,32 @@
                 description: '',
                 ticketStatus: '',                
                 role:'',
-                options: [],
+                ticketStatusOptions: [],
             }
         },
         methods: {
             getTicketById() {
-                var _this = this
-                let ticketId = location.toString().replace('http://localhost:5000/TicketEdit?ticketId=', '').toString();
+                var _this = this            
                 axios({
                     method: 'post',
                     url: api.getTicketById,
                     data: {
-                        ticketId: ticketId
+                        ticketId: getQueryString('ticketId')
                     },
                     headers: {
                         Authorization: token
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
-                        let responseData = response.data.data;
-                        console.log(responseData);
-                        _this.role = responseData.role;
-                        _this.options = responseData.ticketStatusOptions
+                        let responseData = response.data.data;                        
+                        _this.role = mapRole(responseData.role);
+                        _this.ticketStatusOptions = responseData.ticketStatusOptions
                         _this.ticketId = responseData.ticketId;
                         _this.title = responseData.title;
                         _this.description = responseData.description;                        
                         _this.ticketStatus = responseData.ticketStatus;
                     } else {
-                        alert('GetTicketById');
-                        console.log(response.data);
+                        alert('GetTicketById');                     
                     }
                 });
             },
@@ -92,8 +89,7 @@
                         alert('update ticket success')
                         window.location = '/TicketList'
                     } else {
-                        alert('updateTicket fail');
-                        console.log(response.data);
+                        alert('updateTicket fail');                     
                     }
                 });
             },
@@ -114,7 +110,6 @@
                         window.location = '/TicketList'
                     } else {
                         alert('deleteTicket fail');
-                        console.log(response.data);
                     }
                 });
             }

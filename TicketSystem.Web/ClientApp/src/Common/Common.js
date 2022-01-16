@@ -47,6 +47,13 @@ export function mapTicketData(tickes) {
     return tickes;
 }
 
+export function getQueryString(key) {
+
+    let urlParams = new URLSearchParams(window.location.search);
+    let queryString = urlParams.get(key);
+    return queryString;
+}
+
 export function mapRole(role) {
 
     if (role == 1) {

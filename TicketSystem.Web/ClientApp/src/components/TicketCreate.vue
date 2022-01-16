@@ -15,7 +15,7 @@
         <label for="" class="col-4 col-form-label">Status</label>
         <div class="col-4">
             <select  v-model="ticketStatus" class="form-control sl">
-                <option v-for="option in options" v-bind:value="option.id" v-bind:key="option.id">
+                <option v-for="option in ticketStatusOptions" v-bind:value="option.id" v-bind:key="option.id">
                     {{ option.value }}
                 </option>
             </select>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import { checkLogin, sessionStorageKeys, api } from '../Common/Common'
+    import { checkLogin, api,token } from '../Common/Common'
     import axios from 'axios'
     export default {
         name: "TicketCreate",
@@ -38,7 +38,7 @@
                 title: '',
                 description: '',
                 ticketStatus: '',                
-                options: [],
+                ticketStatusOptions: [],
             }
         },
         methods: {           
@@ -48,11 +48,11 @@
                     method: 'post',
                     url: api.getTicketStatus,
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
-                        _this.options = response.data.data.ticketStatusOptions;                        
+                        _this.ticketStatusOptions = response.data.data.ticketStatusOptions;
                     }
                 });
             },
@@ -67,7 +67,7 @@
                         ticketStatus: _this.ticketStatus
                     },
                     headers: {
-                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                        Authorization: token
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {

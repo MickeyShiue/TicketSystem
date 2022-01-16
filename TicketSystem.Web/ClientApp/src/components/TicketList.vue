@@ -1,7 +1,7 @@
 <template>
     <div class="form-group row">
         <div class="col-12">
-            <a href="/TicketCreate" class="btn btn-primary mr-3" v-if="role!='RD'" @click="gotoCreate">Create</a>
+            <a href="/TicketCreate" class="btn btn-primary mr-3" v-if="role!='RD'">CreateTicket</a>
         </div>
     </div>
     <table class='table table-striped' aria-labelledby="tableLabel" v-if="tickets">

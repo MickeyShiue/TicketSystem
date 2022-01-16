@@ -2,7 +2,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand">Vue JS Template for .NET 5</a>               
+                <a class="navbar-brand">TicketSystem HomeWork</a>               
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" v-bind:class="{show: isExpanded}" v-if="isLogin">
                     <ul class="navbar-nav flex-grow">                                    
                         <li class="nav-item">
