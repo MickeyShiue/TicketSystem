@@ -13,5 +13,7 @@ namespace TicketSystem.Web.Service.TicketService
         IEnumerable<TicketStatusOption> GetTicketOptionsByRole(RoleEnum role);
 
         bool UpdateTicket(TicketInfo ticket);
+
+        bool DeleteTicket(TicketInfo ticket);
     }
 }

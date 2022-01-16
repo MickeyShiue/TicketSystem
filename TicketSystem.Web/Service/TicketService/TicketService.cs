@@ -67,5 +67,16 @@ namespace TicketSystem.Web.Service.TicketService
 
             return true;
         }
+
+        public bool DeleteTicket(TicketInfo ticket)
+        {
+            _memoryCache.TryGetValue(CacheKey.TicketList, out List<TicketInfo> tickets);
+            var ticketResult = tickets.Where(r => r.TicketId != ticket.TicketId).ToList();
+
+            //先不考慮 Thread safe 問題
+            _memoryCache.Set(CacheKey.TicketList, ticketResult);
+
+            return true;
+        }
     }
 }

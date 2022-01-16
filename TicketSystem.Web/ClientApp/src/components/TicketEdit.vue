@@ -24,6 +24,7 @@
     <div class="form-group row">
         <div class="col-12">
             <button type="button" class="btn btn-primary mr-3" @click="updateTicket">update</button>
+            <button type="button" class="btn btn btn-danger mr-3" @click="deleteTicket" v-if="role==1" >Delete</button>
         </div>
     </div>
 </template>
@@ -40,6 +41,7 @@
                 description: '',
                 ticketStatus: '',
                 ticketType: '',
+                role:'',
                 options: [],
             }
         },
@@ -59,6 +61,9 @@
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
                         let responseData = response.data.data;
+                        console.log(responseData);
+
+                        _this.role = responseData.role;
                         _this.options = responseData.ticketStatusOptions
                         _this.ticketId = responseData.ticketId;
                         _this.title = responseData.title;
@@ -90,7 +95,28 @@
                         alert('update ticket success')
                         window.location = '/TicketList'
                     } else {
-                        alert('updateTicket');
+                        alert('updateTicket fail');
+                        console.log(response.data);
+                    }
+                });
+            },
+            deleteTicket() {
+                var _this = this
+                axios({
+                    method: 'post',
+                    url: api.deleteTicket,
+                    data: {
+                        ticketId: _this.ticketId                     
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
+                    }
+                }).then(function (response) {
+                    if (response.data.errorCode == 200) {
+                        alert('delete ticket success')
+                        window.location = '/TicketList'
+                    } else {
+                        alert('deleteTicket fail');
                         console.log(response.data);
                     }
                 });

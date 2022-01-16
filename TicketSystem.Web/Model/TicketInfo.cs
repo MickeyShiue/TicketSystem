@@ -15,6 +15,8 @@ namespace TicketSystem.Web.Model
 
         public TicketTypeEnum TicketType { get; set; }
 
+        public RoleEnum Role { get; set; }
+
         public IEnumerable<TicketStatusOption> TicketStatusOptions { get; set; }
     }    
 

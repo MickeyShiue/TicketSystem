@@ -41,6 +41,7 @@ namespace TicketSystem.Web.Controllers
         {
             var ticket = _ticketService.GetTicketById(getTicketByIdRequest.TicketId);
             ticket.TicketStatusOptions = _ticketService.GetTicketOptionsByRole(UserInfo.Role);
+            ticket.Role = UserInfo.Role;
 
             if (ticket == null)
                 return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
@@ -57,6 +58,17 @@ namespace TicketSystem.Web.Controllers
                 return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
 
             return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);           
+        }
+
+        [Authorize(Roles = "QA")]
+        [HttpPost("DeleteTicket")]
+        public ActionResult<BaseResult<object>> DeleteTicket(TicketInfo ticket)
+        {
+            var updateReuslt = _ticketService.DeleteTicket(ticket);
+            if (updateReuslt)
+                return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
+
+            return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
         }
     }
 }

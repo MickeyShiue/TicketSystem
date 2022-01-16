@@ -3,7 +3,8 @@
     loginUrl: 'api/Token/Login',
     getTickets: 'api/Ticket/TicketList',
     getTicketById: 'api/Ticket/GetTicketById',
-    updateTicket:'api/Ticket/UpdateTicket'
+    updateTicket: 'api/Ticket/UpdateTicket',
+    deleteTicket:'api/Ticket/DeleteTicket'
 }
 
 export const sessionStorageKeys = {
