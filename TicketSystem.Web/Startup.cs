@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TicketSystem.Web.Service.AuthUserService;
 using TicketSystem.Web.Service.JwtService;
+using TicketSystem.Web.Service.TicketService;
 using VueCliMiddleware;
 
 namespace TicketSystem.Web
@@ -25,6 +26,7 @@ namespace TicketSystem.Web
             services.AddControllers();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IJwtService, JwtService>();
+            services.AddTransient<ITicketService, TicketService>();
             services.AddMemoryCache();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -32,11 +34,14 @@ namespace TicketSystem.Web
             {
                 options.IncludeErrorDetails = true;
                 options.TokenValidationParameters = new TokenValidationParameters
-                {
+                {                                 
+                    NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",                  
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
                     ValidateIssuer = true,
-                    ValidIssuer = Configuration.GetValue<string>("JwtSettings:Issuer"),
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = false,
+                    ValidIssuer = Configuration.GetValue<string>("JwtSettings:Issuer"),     
+                    ValidateAudience = false,                   
+                    ValidateLifetime = true,                 
+                    ValidateIssuerSigningKey = false,                 
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("JwtSettings:SignKey")))
                 };
             });
@@ -75,7 +80,6 @@ namespace TicketSystem.Web
                 {
                     spa.UseVueCli(npmScript: "serve");
                 }
-
             });
         }
     }

@@ -39,6 +39,7 @@
             getWeatherForecasts() {
                 axios.get('/weatherforecast')
                     .then((response) => {
+                        console.log(response.data);
                         this.forecasts =  response.data;
                     })
                     .catch(function (error) {

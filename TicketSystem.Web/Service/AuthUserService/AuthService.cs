@@ -49,6 +49,28 @@ namespace TicketSystem.Web.Service.AuthUserService
                 },
             };
             _memoryCache.Set(CacheKey.MemberList, memberList);
+
+            //tikcet
+            var ticketList = new List<TicketInfo>()
+            {
+                new TicketInfo
+                {
+                    TicketId = Guid.NewGuid().ToString(),
+                    Title = "QA BUG1",
+                    Description = "QA Bug ticket1",
+                    TicketStatus = TicketStatusEnum.New,
+                    TicketType = TicketTypeEnum.Bug,                    
+                },
+                new TicketInfo
+                {
+                    TicketId = Guid.NewGuid().ToString(),
+                    Title = "QA BUG2",
+                    Description = "QA Bug ticket2",
+                    TicketStatus = TicketStatusEnum.Active,
+                    TicketType = TicketTypeEnum.Bug,                    
+                }
+            };
+            _memoryCache.Set(CacheKey.TicketList, ticketList);
         }
     }
 }
