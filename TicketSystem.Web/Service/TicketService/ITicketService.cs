@@ -6,7 +6,7 @@ namespace TicketSystem.Web.Service.TicketService
 {
     public interface ITicketService
     {
-        IEnumerable<TicketInfo> GetTickets(UserInfo user);
+        IEnumerable<TicketInfo> GetTickets();
 
         TicketInfo GetTicketById(string ticketId);
 

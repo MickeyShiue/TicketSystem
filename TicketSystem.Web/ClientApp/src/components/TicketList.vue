@@ -49,13 +49,10 @@
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {                        
                         _this.tickets = response.data.data.tickets;
-
                         _this.tickets.forEach(function(item){
                             item.ticketType = mapTicketType(item.ticketType);
                             item.ticketStatus = mapTicketStatus(item.ticketStatus);                            
                         });
-
-                        console.log(_this.tickets);
                     } else {
                         alert('getTicketFail');
                         console.log(response.data);
@@ -65,14 +62,14 @@
             getUserRole() {
                 var _this = this
                 axios({
-                    method: 'post',
+                    method: 'get',
                     url: api.getUserRole,
                     headers: {
                         Authorization: 'Bearer ' + sessionStorage.getItem(sessionStorageKeys.token)
                     }
                 }).then(function (response) {
-                    if (response.data.errorCode == 200) {
-                        _this.role = response.data.data.role;            
+                    if (response.data.errorCode == 200) {                       
+                        _this.role = response.data.data;            
                     } 
                 });
             },

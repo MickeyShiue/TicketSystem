@@ -7,7 +7,7 @@
     deleteTicket: 'api/Ticket/DeleteTicket',
     getTicketStatus: 'api/Ticket/GetTicketStatus',
     createTicket: 'api/Ticket/CreateTicket',
-    getUserRole:'api/Ticket/GetUserRole'
+    getUserRole:'api/Role/UserRole'
 }
 
 export const sessionStorageKeys = {

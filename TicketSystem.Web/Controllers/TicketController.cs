@@ -23,7 +23,7 @@ namespace TicketSystem.Web.Controllers
         [HttpPost("TicketList")]
         public ActionResult<BaseResult<TicketListResponse>> GetTicketList()
         {
-            var tickets = _ticketService.GetTickets(UserInfo);
+            var tickets = _ticketService.GetTickets();
 
             var ticketsResponse = new TicketListResponse() { Tickets = tickets };
             return new BaseResult<TicketListResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticketsResponse);
@@ -87,19 +87,6 @@ namespace TicketSystem.Web.Controllers
                 return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
 
             return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
-        }
-
-        [Authorize(Roles = "QA,RD")]
-        [HttpPost("GetUserRole")]
-        public ActionResult<BaseResult<TicketInfo>> GetUserRole()
-        {
-            var ticket = new TicketInfo();
-            ticket.Role = UserInfo.Role;
-
-            if (ticket == null)
-                return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
-
-            return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
-        }
+        }     
     }
 }
