@@ -44,10 +44,9 @@ namespace TicketSystem.Web.Controllers
         {
             var ticket = _ticketService.GetTicketById(getTicketByIdRequest.TicketId);          
             
-            if (ticket == null)
-                return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
-
-            return new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
+            return ticket == null
+                ? new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null)
+                : new BaseResult<TicketInfo>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticket);
         }
 
         /// <summary>
@@ -60,10 +59,9 @@ namespace TicketSystem.Web.Controllers
         public ActionResult<BaseResult<object>> CreateTicket(TicketInfo ticket)
         {
             var createSuccess = _ticketService.CreateTicket(ticket);
-            if (createSuccess)
-                return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
-
-            return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
+            return createSuccess 
+                ? new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null) 
+                : new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
         }
 
         /// <summary>
@@ -76,10 +74,9 @@ namespace TicketSystem.Web.Controllers
         public ActionResult<BaseResult<object>> UpdateTicket(TicketInfo ticket)
         {
             var updateSuccess  = _ticketService.UpdateTicket(ticket,UserInfo.Role);         
-            if (updateSuccess)
-                return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
-
-            return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);           
+            return updateSuccess 
+                ? new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null) 
+                : new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
         }
 
         /// <summary>
@@ -92,10 +89,9 @@ namespace TicketSystem.Web.Controllers
         public ActionResult<BaseResult<object>> DeleteTicket(TicketInfo ticket)
         {
             var deleteSuccess = _ticketService.DeleteTicket(ticket);
-            if (deleteSuccess)
-                return new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null);
-
-            return new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
+            return deleteSuccess 
+                ? new BaseResult<object>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), null) 
+                : new BaseResult<object>((int)ApiResponseCodeEnum.InternalServerError, ApiResponseCodeEnum.InternalServerError.ToString(), null);
         }
 
         /// <summary>
@@ -106,13 +102,14 @@ namespace TicketSystem.Web.Controllers
         [HttpPost("GetTicketStatus")]
         public ActionResult<BaseResult<TicketStatusResponse>> GetTicketStatus()
         {            
-            var ticketStatusResponse = new TicketStatusResponse();
-            ticketStatusResponse.TicketStatusOptions = _ticketService.GetTicketOptionsByRole(UserInfo.Role);
+            var ticketStatusResponse = new TicketStatusResponse
+            {
+                TicketStatusOptions = _ticketService.GetTicketOptionsByRole(UserInfo.Role)
+            };
 
-            if(ticketStatusResponse.TicketStatusOptions.Any())
-                return new BaseResult<TicketStatusResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticketStatusResponse);
-
-            return new BaseResult<TicketStatusResponse>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);        
+            return ticketStatusResponse.TicketStatusOptions.Any() 
+                ? new BaseResult<TicketStatusResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), ticketStatusResponse) 
+                : new BaseResult<TicketStatusResponse>((int)ApiResponseCodeEnum.BadRequest, ApiResponseCodeEnum.BadRequest.ToString(), null);
         }     
     }
 }

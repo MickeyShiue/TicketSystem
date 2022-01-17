@@ -37,12 +37,12 @@ namespace TicketSystem.Web.Service.TicketService
 
             if (role == RoleEnum.QA)
             {
-                return ticketStatusOptions.Where(r => r.id != (int)TicketStatusEnum.Resloved).ToList();
+                return ticketStatusOptions.Where(r => r.id != (int)TicketStatusEnum.Resolved).ToList();
             }
 
             if (role == RoleEnum.RD)
             {
-                return ticketStatusOptions.Where(r => r.id == (int)TicketStatusEnum.Resloved).ToList();
+                return ticketStatusOptions.Where(r => r.id == (int)TicketStatusEnum.Resolved).ToList();
             }
 
             return ticketStatusOptions;

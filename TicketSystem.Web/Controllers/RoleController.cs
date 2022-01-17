@@ -16,10 +16,16 @@ namespace TicketSystem.Web.Controllers
         {
             if (UserInfo == null)
             {
-                return new BaseResult<RoleEnum>((int)ApiResponseCodeEnum.Unauthorized, ApiResponseCodeEnum.Unauthorized.ToString(), RoleEnum.Default);
+                return new BaseResult<RoleEnum>(
+                    (int)ApiResponseCodeEnum.Unauthorized,
+                    ApiResponseCodeEnum.Unauthorized.ToString(),
+                    RoleEnum.Default);
             }
 
-            return new BaseResult<RoleEnum>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), UserInfo.Role);
+            return new BaseResult<RoleEnum>(
+                (int)ApiResponseCodeEnum.Success, 
+                ApiResponseCodeEnum.Success.ToString(),
+                UserInfo.Role);
         }
     }
 }

@@ -6,7 +6,7 @@
 
         Active = 2,
 
-        Resloved = 3,
+        Resolved = 3,
 
         Closed = 4
     }

@@ -1,44 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
+using System.Web.Http;
 using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model;
 
 namespace TicketSystem.Web.Controllers
 {
     public class BaseController : ControllerBase
-   {       
-        public UserInfo UserInfo
+    {
+        protected UserInfo UserInfo
         {
             get
             {
-                if (this.User.Identity != null && this.User.Identity.IsAuthenticated)
+                if (User.Identity is { IsAuthenticated: true })
                 {
-                    var roleValue = this.User.Claims.FirstOrDefault(item => item.Type == ClaimTypes.Role).Value;                    
-                    var user = new UserInfo()
-                    {
-                        UserName = User.Identity.Name,
-                        Role = UserRole(roleValue)
-                    };
-                    return user;
+                    return GetUserInfo();
                 }
-                return null;
+
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
             }
-        }   
-        
-        private RoleEnum UserRole(string role)
+        }
+
+        private UserInfo GetUserInfo()
         {
-            switch (role)
+            var user = new UserInfo()
             {
-                case "QA":
-                    return RoleEnum.QA;
-                case "RD":
-                    return RoleEnum.RD;
-                case "PM":
-                    return RoleEnum.PM;
-                default:
-                    return RoleEnum.Admin;
-            }
+                UserName = User.Identity.Name,
+                Role = System.Enum.Parse<RoleEnum>(GetUserRoleValue())
+            };
+
+            return user;
+        }
+
+        private string GetUserRoleValue()
+        {
+            return User.Claims.Where(r => r.Type == ClaimTypes.Role)
+                                                   .Select(r => r.Value)
+                                                   .FirstOrDefault();
         }
     }
 }
