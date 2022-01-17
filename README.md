@@ -21,9 +21,9 @@
 ### Login 資訊
 
 `Role：QA`
-- UserName：QA1
-- PassWord：QA1
+- userName：QA1
+- passWord：QA1
 
 `Role：RD`
-- UserName：RD1
-- PassWord：RD1
+- userName：RD1
+- passWord：RD1
