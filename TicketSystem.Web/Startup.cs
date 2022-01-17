@@ -26,7 +26,7 @@ namespace TicketSystem.Web
             services.AddControllers();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IJwtService, JwtService>();
-            services.AddTransient<ITicketService, TicketService>();
+            services.AddSingleton<ITicketService, TicketService>();
             services.AddMemoryCache();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

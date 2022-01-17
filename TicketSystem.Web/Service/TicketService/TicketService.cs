@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TicketSystem.Web.Common;
 using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model;
@@ -12,7 +11,7 @@ namespace TicketSystem.Web.Service.TicketService
     public class TicketService : ITicketService
     {
         private readonly IMemoryCache _memoryCache;
-        private readonly object lockObject = new object();
+        private static object _lock = new object();
 
         public TicketService(IMemoryCache memoryCache)
         {
@@ -49,32 +48,43 @@ namespace TicketSystem.Web.Service.TicketService
             return ticketStatusOptions;
         }
 
-        public bool UpdateTicket(TicketInfo ticket)
+        public bool UpdateTicket(TicketInfo ticket, RoleEnum role)
         {
             _memoryCache.TryGetValue(CacheKey.TicketList, out List<TicketInfo> tickets);
-            foreach (var ticketItem in tickets)
+
+            var roleAllowTicketStatus = GetTicketOptionsByRole(role);
+            var IsAllowUpdate = roleAllowTicketStatus.Any(r => r.id == (int)ticket.TicketStatus);
+            if (IsAllowUpdate)
             {
-                if(ticketItem.TicketId == ticket.TicketId)
+                foreach (var ticketItem in tickets)
                 {
-                    ticketItem.Title = ticket.Title;
-                    ticketItem.Description = ticket.Description;                    
-                    ticketItem.TicketStatus = ticket.TicketStatus;
+                    if (ticketItem.TicketId == ticket.TicketId)
+                    {
+                        ticketItem.Title = ticket.Title;
+                        ticketItem.Description = ticket.Description;
+                        ticketItem.TicketStatus = ticket.TicketStatus;
+                    }
                 }
+                lock (_lock)
+                {
+                    _memoryCache.Set(CacheKey.TicketList, tickets);
+                    return true;
+                }
+              
             }
 
-            //先不考慮 Thread safe 問題
-            _memoryCache.Set(CacheKey.TicketList, tickets);
-
-            return true;
+            return false;
         }
 
         public bool DeleteTicket(TicketInfo ticket)
         {
             _memoryCache.TryGetValue(CacheKey.TicketList, out List<TicketInfo> tickets);
-            var ticketResult = tickets.Where(r => r.TicketId != ticket.TicketId).ToList();
 
-            //先不考慮 Thread safe 問題
-            _memoryCache.Set(CacheKey.TicketList, ticketResult);
+            var ticketResult = tickets.Where(r => r.TicketId != ticket.TicketId).ToList();
+            lock (_lock)
+            {
+                _memoryCache.Set(CacheKey.TicketList, ticketResult);
+            }
 
             return true;
         }
@@ -92,8 +102,11 @@ namespace TicketSystem.Web.Service.TicketService
                 TicketType = TicketTypeEnum.Bug
             });
 
-            _memoryCache.Set(CacheKey.TicketList, tickets);
+            lock (_lock)
+            {
+                _memoryCache.Set(CacheKey.TicketList, tickets);
+            }          
             return true;
-        }
+        }                  
     }
 }

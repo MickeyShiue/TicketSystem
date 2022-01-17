@@ -58,15 +58,41 @@
                     }
                 }).then(function (response) {
                     if (response.data.errorCode == 200) {
-                        let responseData = response.data.data;                        
-                        _this.role = mapRole(responseData.role);
-                        _this.ticketStatusOptions = responseData.ticketStatusOptions
+                        let responseData = response.data.data;                                                                 
                         _this.ticketId = responseData.ticketId;
                         _this.title = responseData.title;
                         _this.description = responseData.description;                        
                         _this.ticketStatus = responseData.ticketStatus;
                     } else {
                         alert('GetTicketById');                     
+                    }
+                });
+            },
+            getTicketStatus() {
+                var _this = this
+                axios({
+                    method: 'post',
+                    url: api.getTicketStatus,
+                    headers: {
+                        Authorization: token
+                    }
+                }).then(function (response) {
+                    if (response.data.errorCode == 200) {
+                        _this.ticketStatusOptions = response.data.data.ticketStatusOptions;
+                    }
+                });
+            },
+            getUserRole() {
+                var _this = this
+                axios({
+                    method: 'get',
+                    url: api.getUserRole,
+                    headers: {
+                        Authorization: token
+                    }
+                }).then(function (response) {
+                    if (response.data.errorCode == 200) {                       
+                        _this.role = mapRole(response.data.data);
                     }
                 });
             },
@@ -117,6 +143,8 @@
         mounted() {            
             checkLogin()
             this.getTicketById();
+            this.getTicketStatus();
+            this.getUserRole();
         }
     }
 </script>
