@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using TicketSystem.Web.Enum;
+using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model;
 using TicketSystem.Web.Model.RequestModel;
 using TicketSystem.Web.Model.ResponseModel;

@@ -1,4 +1,4 @@
-﻿namespace TicketSystem.Web.Enum
+﻿namespace TicketSystem.Web.Enums
 {
     public enum ApiResponseCodeEnum
     {

@@ -1,44 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
-using TicketSystem.Web.Enum;
+using System.Web.Http;
+using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model;
 
 namespace TicketSystem.Web.Controllers
 {
     public class BaseController : ControllerBase
-   {       
+    {
         public UserInfo UserInfo
         {
             get
             {
-                if (this.User.Identity != null && this.User.Identity.IsAuthenticated)
+                if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    var roleValue = this.User.Claims.FirstOrDefault(item => item.Type == ClaimTypes.Role).Value;                    
-                    var user = new UserInfo()
-                    {
-                        UserName = User.Identity.Name,
-                        Role = UserRole(roleValue)
-                    };
-                    return user;
+                    return GetUsuerInfo();
                 }
-                return null;
+
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
             }
-        }   
-        
-        private RoleEnum UserRole(string role)
+        }
+
+        private UserInfo GetUsuerInfo()
         {
-            switch (role)
+            var user = new UserInfo()
             {
-                case "QA":
-                    return RoleEnum.QA;
-                case "RD":
-                    return RoleEnum.RD;
-                case "PM":
-                    return RoleEnum.PM;
-                default:
-                    return RoleEnum.Admin;
-            }
+                UserName = User.Identity.Name,
+                Role = Enum.Parse<RoleEnum>(GetUserRoleValue())
+            };
+
+            return user;
+        }
+
+        private string GetUserRoleValue()
+        {
+            return User.Claims.Where(r => r.Type == ClaimTypes.Role)
+                                                   .Select(r => r.Value)
+                                                   .FirstOrDefault();
         }
     }
 }

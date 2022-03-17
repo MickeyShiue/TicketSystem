@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TicketSystem.Web.Common;
-using TicketSystem.Web.Enum;
+using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model;
 using TicketSystem.Web.Model.RequestModel;
 using System.Linq;

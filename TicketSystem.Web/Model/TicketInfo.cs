@@ -1,4 +1,4 @@
-﻿using TicketSystem.Web.Enum;
+﻿using TicketSystem.Web.Enums;
 
 namespace TicketSystem.Web.Model
 {

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicketSystem.Web.Enum;
+using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model.RequestModel;
 using TicketSystem.Web.Model.ResponseModel;
 using TicketSystem.Web.Service.AuthUserService;
@@ -32,17 +32,10 @@ namespace TicketSystem.Web.Controllers
         {
             if (_authService.VerifyUser(login))
             {
-                var token = _jwtService.GenerateToken(login);
-
-                if (!string.IsNullOrEmpty(token))
-                {
-                    var tokenResponse = new TokenResponse() { Token = token };
-                    return new BaseResult<TokenResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), tokenResponse);
-                }
-            }         
+                var tokenResponse = new TokenResponse() { Token = _jwtService.GenerateToken(login) };
+                return new BaseResult<TokenResponse>((int)ApiResponseCodeEnum.Success, ApiResponseCodeEnum.Success.ToString(), tokenResponse);
+            }
             return new BaseResult<TokenResponse>((int)ApiResponseCodeEnum.Unauthorized, ApiResponseCodeEnum.Unauthorized.ToString(), null);
         }
-
-
     }
 }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TicketSystem.Web.Common;
-using TicketSystem.Web.Enum;
+using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model;
 using TicketSystem.Web.Model.RequestModel;
 using System.Linq;
@@ -22,57 +22,24 @@ namespace TicketSystem.Web.Service.AuthUserService
         public bool VerifyUser(LoginRequest login)
         {
             _memoryCache.TryGetValue(CacheKey.MemberList, out List<UserInfo> memberList);
-            var isExist = memberList.Where(r => r.UserName == login.Username && r.PassWord == login.Password).Any();
-            return isExist;
+            return memberList.Where(r => r.UserName == login.Username && r.PassWord == login.Password).Any();            
         }
 
         private void InitializationCache()
         {
-            //UserRole
-            var memberList = new List<UserInfo>()
-            {
-                new UserInfo
-                {
-                    UserName = "QA1",
-                    PassWord = "QA1",
-                    Role = RoleEnum.QA,
-                    TicketStatuses = new List<TicketStatusEnum>(){ TicketStatusEnum.New,TicketStatusEnum.Active,TicketStatusEnum.Closed},
-                    TicketTypes = new List<TicketTypeEnum>(){ TicketTypeEnum.Bug, TicketTypeEnum.Test}
-                },
-                new UserInfo
-                {
-                    UserName = "RD1",
-                    PassWord = "RD1",
-                    Role = RoleEnum.RD,
-                    TicketStatuses = new List<TicketStatusEnum>(){ TicketStatusEnum .Resloved},
-                    TicketTypes = new List<TicketTypeEnum>(){}
-                },
-            };
+            List<UserInfo> memberList = GetUsersInfo();
             _memoryCache.Set(CacheKey.MemberList, memberList);
 
-            //tikcet
-            var ticketList = new List<TicketInfo>()
-            {
-                new TicketInfo
-                {
-                    TicketId = Guid.NewGuid().ToString(),
-                    Title = "QA BUG1",
-                    Description = "QA Bug ticket1",
-                    TicketStatus = TicketStatusEnum.New,
-                    TicketType = TicketTypeEnum.Bug,                    
-                },
-                new TicketInfo
-                {
-                    TicketId = Guid.NewGuid().ToString(),
-                    Title = "QA BUG2",
-                    Description = "QA Bug ticket2",
-                    TicketStatus = TicketStatusEnum.Active,
-                    TicketType = TicketTypeEnum.Bug,                    
-                }
-            };
+            List<TicketInfo> ticketList = GetTickets();
             _memoryCache.Set(CacheKey.TicketList, ticketList);
 
-            var ticketOption = new List<TicketStatusOption>()
+            List<TicketStatusOption> ticketOption = GetTicketOptions();
+            _memoryCache.Set(CacheKey.TicketStatusOption, ticketOption);
+        }
+
+        private static List<TicketStatusOption> GetTicketOptions()
+        {
+            return new List<TicketStatusOption>()
             {
                 new TicketStatusOption
                 {
@@ -95,7 +62,55 @@ namespace TicketSystem.Web.Service.AuthUserService
                     value ="Closed"
                 },
             };
-            _memoryCache.Set(CacheKey.TicketStatusOption, ticketOption);
+        }
+
+        private static List<TicketInfo> GetTickets()
+        {
+
+            //tikcet
+            return new List<TicketInfo>()
+            {
+                new TicketInfo
+                {
+                    TicketId = Guid.NewGuid().ToString(),
+                    Title = "QA BUG1",
+                    Description = "QA Bug ticket1",
+                    TicketStatus = TicketStatusEnum.New,
+                    TicketType = TicketTypeEnum.Bug,
+                },
+                new TicketInfo
+                {
+                    TicketId = Guid.NewGuid().ToString(),
+                    Title = "QA BUG2",
+                    Description = "QA Bug ticket2",
+                    TicketStatus = TicketStatusEnum.Active,
+                    TicketType = TicketTypeEnum.Bug,
+                }
+            };
+        }
+
+        private static List<UserInfo> GetUsersInfo()
+        {
+            //UserRole
+            return new List<UserInfo>()
+            {
+                new UserInfo
+                {
+                    UserName = "QA1",
+                    PassWord = "QA1",
+                    Role = RoleEnum.QA,
+                    TicketStatuses = new List<TicketStatusEnum>(){ TicketStatusEnum.New,TicketStatusEnum.Active,TicketStatusEnum.Closed},
+                    TicketTypes = new List<TicketTypeEnum>(){ TicketTypeEnum.Bug, TicketTypeEnum.Test}
+                },
+                new UserInfo
+                {
+                    UserName = "RD1",
+                    PassWord = "RD1",
+                    Role = RoleEnum.RD,
+                    TicketStatuses = new List<TicketStatusEnum>(){ TicketStatusEnum .Resloved},
+                    TicketTypes = new List<TicketTypeEnum>(){}
+                },
+            };
         }
     }
 }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TicketSystem.Web.Common;
-using TicketSystem.Web.Enum;
+using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model;
 
 namespace TicketSystem.Web.Service.TicketService
