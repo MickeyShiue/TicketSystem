@@ -1,35 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Web.Http;
-using TicketSystem.Web.Enums;
+using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model;
 
 namespace TicketSystem.Web.Controllers
 {
     public class BaseController : ControllerBase
     {
-        public UserInfo UserInfo
+        protected UserInfo UserInfo
         {
             get
             {
-                if (User.Identity != null && User.Identity.IsAuthenticated)
+                if (User.Identity is { IsAuthenticated: true })
                 {
-                    return GetUsuerInfo();
+                    return GetUserInfo();
                 }
 
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
             }
         }
 
-        private UserInfo GetUsuerInfo()
+        private UserInfo GetUserInfo()
         {
             var user = new UserInfo()
             {
                 UserName = User.Identity.Name,
-                Role = Enum.Parse<RoleEnum>(GetUserRoleValue())
+                Role = System.Enum.Parse<RoleEnum>(GetUserRoleValue())
             };
 
             return user;

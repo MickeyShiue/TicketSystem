@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TicketSystem.Web.Common;
-using TicketSystem.Web.Enums;
+using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model;
 
 namespace TicketSystem.Web.Service.TicketService
@@ -37,12 +37,12 @@ namespace TicketSystem.Web.Service.TicketService
 
             if (role == RoleEnum.QA)
             {
-                return ticketStatusOptions.Where(r => r.id != (int)TicketStatusEnum.Resloved).ToList();
+                return ticketStatusOptions.Where(r => r.id != (int)TicketStatusEnum.Resolved).ToList();
             }
 
             if (role == RoleEnum.RD)
             {
-                return ticketStatusOptions.Where(r => r.id == (int)TicketStatusEnum.Resloved).ToList();
+                return ticketStatusOptions.Where(r => r.id == (int)TicketStatusEnum.Resolved).ToList();
             }
 
             return ticketStatusOptions;

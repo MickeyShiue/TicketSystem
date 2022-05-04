@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using TicketSystem.Web.Common;
-using TicketSystem.Web.Enums;
 using TicketSystem.Web.Model;
 using TicketSystem.Web.Model.RequestModel;
 using System.Linq;
+using TicketSystem.Web.Enum;
 
 namespace TicketSystem.Web.Service.AuthUserService
 {
@@ -107,7 +107,7 @@ namespace TicketSystem.Web.Service.AuthUserService
                     UserName = "RD1",
                     PassWord = "RD1",
                     Role = RoleEnum.RD,
-                    TicketStatuses = new List<TicketStatusEnum>(){ TicketStatusEnum .Resloved},
+                    TicketStatuses = new List<TicketStatusEnum>(){ TicketStatusEnum .Resolved},
                     TicketTypes = new List<TicketTypeEnum>(){}
                 },
             };

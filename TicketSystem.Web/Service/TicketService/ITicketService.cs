@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TicketSystem.Web.Enums;
+using TicketSystem.Web.Enum;
 using TicketSystem.Web.Model;
 
 namespace TicketSystem.Web.Service.TicketService

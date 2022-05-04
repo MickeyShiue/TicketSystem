@@ -1,4 +1,4 @@
-﻿namespace TicketSystem.Web.Enums
+﻿namespace TicketSystem.Web.Enum
 {
     public enum TicketStatusEnum
     {
@@ -6,7 +6,7 @@
 
         Active = 2,
 
-        Resloved = 3,
+        Resolved = 3,
 
         Closed = 4
     }

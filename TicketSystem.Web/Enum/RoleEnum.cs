@@ -1,4 +1,4 @@
-﻿namespace TicketSystem.Web.Enums
+﻿namespace TicketSystem.Web.Enum
 {
     public enum RoleEnum
     {
